@@ -12,7 +12,7 @@ import { PagComponent } from './pag/pag.component';
     AppComponent,
     NavbarComponent,
     ListComponent,
-    PagComponent
+    PagComponent,
   ],
   imports: [
     BrowserModule,

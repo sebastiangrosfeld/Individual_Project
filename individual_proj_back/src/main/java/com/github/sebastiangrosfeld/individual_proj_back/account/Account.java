@@ -1,15 +1,14 @@
 package com.github.sebastiangrosfeld.individual_proj_back.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.sebastiangrosfeld.individual_proj_back.user.AppUser;
+import com.github.sebastiangrosfeld.individual_proj_back.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Table(name = "accounts")
-@Entity
+@Entity(name = "Account")
 @Getter
 @Setter
 @ToString
@@ -17,13 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 public class Account {
     @Id
-    @Column(name = "account_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private double balance;
+    private String name;
+    private Long number;
+    private BigDecimal balance;
     private String type;
-    @JsonIgnore
-    @ManyToMany(mappedBy = "notes")
-    private List<AppUser> users;
+    @OneToOne
+    @JoinColumn(
+            nullable = false,
+            name = "id"
+    )
+    private User user;
+
 }
