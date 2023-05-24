@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ListComponent } from './list/list.component';
 import { PagComponent } from './pag/pag.component';
+import { MainComponent } from './components/main/main.component';
+import { AuthorizationComponent } from './components/authorization/authorization.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +17,10 @@ import { PagComponent } from './pag/pag.component';
     NavbarComponent,
     ListComponent,
     PagComponent,
+    MainComponent,
+    AuthorizationComponent,
+    RegisterComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
