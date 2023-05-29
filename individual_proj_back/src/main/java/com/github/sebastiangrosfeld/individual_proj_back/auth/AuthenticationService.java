@@ -29,6 +29,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    public static String email;
+
     public AuthenticationResponse register(RegisterRequest request) {
 
         User validationUser = request.toUser(passwordEncoder);
@@ -64,6 +66,8 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
+        email = request.getEmail();
+        System.out.println(email);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);

@@ -9,34 +9,41 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class LoginComponent implements OnInit{
   
-  form: any = {};
+  form: any = {
+    username: null,
+    password: null
+  };
   isLoggedIn = false;
   isLoginFailed = false;
-  errormess = '';
+  errorMessage = '';
+  roles: string[] = [];
 
   constructor(private authService: AuthService, private tokenStorage: StorageService) {}
   
   ngOnInit(): void {
-    if (this.tokenStorage.getToken()){
+    if (this.tokenStorage.isLoggedIn()){
       this.isLoggedIn = true;
+      this.roles = this.tokenStorage.getUser().roles;
     }
   }
 
   onSubmit(): void {
-    this.authService.login(this.form).subscribe(
-      data => {
-        this.tokenStorage.saveToken(data.accesToken);
+    const {username, password} = this.form;
+
+    this.authService.login(username , password).subscribe({
+      next: data => {
         this.tokenStorage.saveUser(data);
 
         this.isLoginFailed = false;
         this.isLoggedIn = true;
+        this.roles = this.tokenStorage.getUser().roles;
         this.reloadPage();
       },
-      err => {
-        this.errormess = err.error.message;
+      error: err => {
+        this.errorMessage = err.error.message;
         this.isLoginFailed = true;
       }
-    );
+  });
   }
   
   reloadPage(): void {

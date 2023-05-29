@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from './services/storage.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,25 +8,42 @@ import { StorageService } from './services/storage.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  username!: string;
+  private roles: string[] = [];
   isLoggedIn = false;
-  title = 'individual_proj_front';
+  showAdminBoard = false;
+  showManagerBoard = false;
+  username?: string;
 
-  constructor(private storageService: StorageService) {
+  constructor(private storageService: StorageService, private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.isLoggedIn = !!this.storageService.getToken();
+    this.isLoggedIn = this.storageService.isLoggedIn();
 
     if(this.isLoggedIn) {
       const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.showAdminBoard = this.roles.includes('ADMIN');
+      this.showManagerBoard = this.roles.includes('MANAGER');
+
       this.username = user.username;
     }
   }
   
-  logout() {
-    this.storageService.singOut();
-    window.location.reload();
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: res => {
+        console.log(res);
+        this.storageService.singOut();
+
+        window.location.reload();
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
+    
   }
   
 }

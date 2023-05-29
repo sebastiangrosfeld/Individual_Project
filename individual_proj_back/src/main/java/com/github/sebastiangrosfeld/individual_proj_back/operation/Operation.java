@@ -2,10 +2,7 @@ package com.github.sebastiangrosfeld.individual_proj_back.operation;
 
 import com.github.sebastiangrosfeld.individual_proj_back.account.Account;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,6 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class Operation {
 
@@ -21,9 +19,10 @@ public class Operation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
     private String type;
 
-    private BigDecimal opValue;
+    private BigDecimal operationValue;
 
     private String sourceCode;
 

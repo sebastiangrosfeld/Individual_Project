@@ -10,6 +10,9 @@ import { MainComponent } from './components/main/main.component';
 import { AuthorizationComponent } from './components/authorization/authorization.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { FormsModule } from '@angular/forms';
+import { ProfileComponent } from './components/profile/profile.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -21,10 +24,13 @@ import { LoginComponent } from './components/login/login.component';
     AuthorizationComponent,
     RegisterComponent,
     LoginComponent,
+    ProfileComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

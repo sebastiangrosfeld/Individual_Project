@@ -8,26 +8,33 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class RegisterComponent implements OnInit{
   
-  form: any = {};
+  form: any = {
+    name: null,
+    surname: null,
+    email: null,
+    password: null
+  };
   isSuccesful = false;
   isSignUpFailed = false;
-  errormess = '';
+  errorMessage = '';
   
   constructor(private authService: AuthService) {}
   
   ngOnInit(): void {}
 
   onSubmit(): void {
-    this.authService.register(this.form).subscribe(
-      data => {
+    const {name, surname, email, password} = this.form;
+
+    this.authService.register(name, surname, email, password).subscribe({
+      next: data => {
         console.log(data);
         this.isSuccesful = true;
         this.isSignUpFailed = false;
       },
-      err => {
-        this.errormess = err.error.message;
+      error: err => {
+        this.errorMessage = err.error.message;
         this.isSignUpFailed = true;
       }
-    );
+  });
   }
 }

@@ -12,22 +12,27 @@ const httpOptions = {
 export class AuthService {
 
   private apiUrl = "environment.apiUrl";
-  private tokenKey = 'auth_token';
 
   constructor(private http: HttpClient) { }
 
-  login(credentials: any): Observable<any> {
-    return this.http.post(this.apiUrl + 'session', {
-      username: credentials.username,
-      password: credentials.password
+  login(login: string, password: string): Observable<any> {
+    return this.http.post(
+      this.apiUrl + 'authenticate', {
+      login,
+      password,
     }, httpOptions);
   }
 
-  register(user: any): Observable<any> {
-    return this.http.post(this.apiUrl + 'users', {
-      username: user.username,
-      email: user.email,
-      password: user.password
+  register(name: string, surname: string, email: string,password: string): Observable<any> {
+    return this.http.post(this.apiUrl + 'register', {
+      name,
+      surname,
+      email,
+      password,
     }, httpOptions);
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(this.apiUrl + 'signout',{}, httpOptions)
   }
 }

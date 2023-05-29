@@ -1,11 +1,11 @@
 package com.github.sebastiangrosfeld.individual_proj_back.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.github.sebastiangrosfeld.individual_proj_back.account.Account;
 import com.github.sebastiangrosfeld.individual_proj_back.token.Token;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Getter
+@Setter
 @Builder
 @Entity
 @Table(name = "users")
@@ -33,6 +35,10 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Account> accounts;
 
     public User(String name, String surname, String email, String encode) {
         this.name = name;
