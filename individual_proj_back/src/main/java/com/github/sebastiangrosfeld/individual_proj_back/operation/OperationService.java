@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +67,27 @@ public class OperationService {
                 .build();
 
         return response;
+    }
+
+    public Operation findAccountById(Long id){
+
+        Optional<Operation> operation = operationRepository.findOperationById(id);
+
+        return operation.orElse(null);
+    }
+
+    public List<Operation> getAllOperationsForAccount(Long id){
+
+        return accountService.findAccountById(id).getOperations();
+    }
+
+    public List<Operation> getAllOperationsForCurrentUser(){
+
+        List<Account> userAccounts = accountService.getAllForCurrentUserAccounts();
+        List<Operation> operations = new ArrayList<>();
+        for (Account a : userAccounts){
+            operations.addAll(a.getOperations());
+        }
+        return operations;
     }
 }

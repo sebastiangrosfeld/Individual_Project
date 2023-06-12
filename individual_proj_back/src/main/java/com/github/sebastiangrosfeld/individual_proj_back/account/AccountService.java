@@ -1,14 +1,10 @@
 package com.github.sebastiangrosfeld.individual_proj_back.account;
 
 import com.github.sebastiangrosfeld.individual_proj_back.auth.AuthenticationService;
-import com.github.sebastiangrosfeld.individual_proj_back.user.UserRepository;
 import com.github.sebastiangrosfeld.individual_proj_back.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,7 +20,7 @@ public class AccountService {
     private final UserService userService;
 
     public AccountAddResponse addAccount(AccountAddRequest accountAddRequest) {
-        String email = authService.email;
+        String email = authService.getEmailFromCurrentUser();
         System.out.println(email);
         String code = generateAccountNr();
         Account account = Account.builder()
@@ -43,20 +39,18 @@ public class AccountService {
                 .build();
     }
 
-    public List<Account> getAllAccounts() {
-        String email = "not working"; //= authService.email;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null)
-            email = authentication.getName();
-        //List<Account> accounts = accountRepository.findAllAccounts(userService.getUserByEmail(email));
-        System.out.println(userService.getUserByEmail(email).getAccounts());
+    public List<Account> getAllForCurrentUserAccounts() {
+
+        String email = authService.getEmailFromCurrentUser();
+
         return userService.getUserByEmail(email).getAccounts();
     }
 
     public Account findAccountById(Long id) {
         Optional<Account> account= accountRepository.findAccountById(id);
-                //.orElseThrow(() -> new IllegalStateException("Account not exist"));
-        return account.orElseThrow(() -> new IllegalStateException("Account not exist"));
+
+        return account.orElse(null);
+       // return account.orElseThrow(() -> new IllegalStateException("Account not exist"));
     }
 
     public Account findAccountByName(String name) {
@@ -74,6 +68,7 @@ public class AccountService {
         Random random = new Random();
 
         boolean isInDatabase = true;
+        String number="";
 
         while (isInDatabase) {
 
@@ -81,12 +76,12 @@ public class AccountService {
                 int randomNr = random.nextInt(10);
                 generatedNr.append(randomNr);
             }
-            String number = "00" + generatedNr.toString();
-            if (!accountRepository.findAccountByCode(number).isPresent()) {
+            number = "00" + generatedNr.toString();
+            if (accountRepository.findAccountByCode(number).isEmpty()) {
                break;
             }
             generatedNr.delete(0,23);
         }
-        return  "00" + generatedNr.toString();
+        return number;
     }
 }

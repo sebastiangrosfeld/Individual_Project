@@ -17,34 +17,31 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping("/all")
-    public ResponseEntity<String> getAllAccounts() {
+    public ResponseEntity<List<Account>> getAllAccountsForCurrentUser() {
 
-        List<Account> accounts = accountService.getAllAccounts();
-        String acc = "";
-        for(int i = 0; i< accounts.size();i++)
-        acc += accounts.get(i).getCode() + "\n";
+        List<Account> accounts = accountService.getAllForCurrentUserAccounts();
 
-        return ResponseEntity.ok(acc);
+        if(accounts == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(accounts);
+
+        return ResponseEntity.ok(accounts);
     }
 
     @GetMapping("/{id}")
-    public  ResponseEntity<String> getAccountById(@PathVariable Long id) {
+    public  ResponseEntity<Account> getAccountById(@PathVariable Long id) {
         Account account = accountService.findAccountById(id);
-        return ResponseEntity.ok(account.toString());
+
+        if(account == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(account);
+
+        return ResponseEntity.ok(account);
     }
 
-
-
-    @GetMapping
-    public ResponseEntity<String> sayHello() {
-
-        return ResponseEntity.ok("Hello from secured endpoint");
-    }
 
     @PostMapping("/add")
     public ResponseEntity<AccountAddResponse> addAccount(@RequestBody AccountAddRequest addRequest) {
         AccountAddResponse response = accountService.addAccount(addRequest);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 }

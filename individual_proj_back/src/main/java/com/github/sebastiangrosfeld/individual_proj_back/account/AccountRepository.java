@@ -13,7 +13,6 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
 
     Optional<Account> findAccountByName(String name);
 
-    @Query(value = "SELECT a from Account a where a.id = :id")
     Optional<Account> findAccountById(Long id);
     Optional<Account> findAccountByCode(String code);
 
