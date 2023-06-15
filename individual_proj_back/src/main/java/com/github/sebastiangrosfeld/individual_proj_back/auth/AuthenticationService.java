@@ -5,8 +5,10 @@ import com.github.sebastiangrosfeld.individual_proj_back.config.JwtService;
 import com.github.sebastiangrosfeld.individual_proj_back.token.Token;
 import com.github.sebastiangrosfeld.individual_proj_back.token.TokenRepository;
 import com.github.sebastiangrosfeld.individual_proj_back.token.TokenType;
+import com.github.sebastiangrosfeld.individual_proj_back.user.Role;
 import com.github.sebastiangrosfeld.individual_proj_back.user.User;
 import com.github.sebastiangrosfeld.individual_proj_back.user.UserRepository;
+import com.github.sebastiangrosfeld.individual_proj_back.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    private final UserService userService;
 
    // public static String email;
 
@@ -83,6 +87,10 @@ public class AuthenticationService {
         if(authentication != null)
            return authentication.getName();
         return null;
+    }
+
+    public Role getRoleForCurrentUser(){
+        return userService.getUserByEmail(getEmailFromCurrentUser()).getRole();
     }
 
     private void saveUserToken(User user, String jwtToken) {

@@ -13,6 +13,9 @@ import { LoginComponent } from './components/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { ProfileComponent } from './components/profile/profile.component';
 import { HomeComponent } from './components/home/home.component';
+import { authInterceptorProviders } from './helpers/auth.interceptor';
+import { HttpClientModule } from '@angular/common/http';
+import { BoardUserComponent } from './components/board-user/board-user.component';
 
 @NgModule({
   declarations: [
@@ -26,13 +29,15 @@ import { HomeComponent } from './components/home/home.component';
     LoginComponent,
     ProfileComponent,
     HomeComponent,
+    BoardUserComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,7 @@
 package com.github.sebastiangrosfeld.individual_proj_back.account;
 
 import com.github.sebastiangrosfeld.individual_proj_back.auth.AuthenticationService;
+import com.github.sebastiangrosfeld.individual_proj_back.user.User;
 import com.github.sebastiangrosfeld.individual_proj_back.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,11 +40,16 @@ public class AccountService {
                 .build();
     }
 
-    public List<Account> getAllForCurrentUserAccounts() {
+    public List<Account> getAllAccountsForCurrentUser() {
 
         String email = authService.getEmailFromCurrentUser();
 
         return userService.getUserByEmail(email).getAccounts();
+    }
+
+    public List<Account> getAllAccountsForUserById(Long id){
+
+        return userService.getUserById(id).getAccounts();
     }
 
     public Account findAccountById(Long id) {
@@ -61,6 +67,15 @@ public class AccountService {
     public Account findAccountByCode(String code) {
         return accountRepository.findAccountByCode(code)
                 .orElseThrow(() -> new IllegalStateException("Account not exist"));
+    }
+
+    public double getTotalBalanceForUserById(Long id){
+        double total = 0.0;
+        List<Account> accounts = userService.getUserById(id).getAccounts();
+        for (Account a : accounts) {
+            total += a.getBalance().doubleValue();
+        }
+        return total;
     }
 
     public String generateAccountNr() {

@@ -18,11 +18,6 @@ public class OperationAddResponse {
     @JsonProperty("source_account_id")
     private Long sourceId;
 
-   // @JsonProperty("source_account_balance")
-   // private String sourceBalance;
     @JsonProperty("destination_account_id")
     private Long destinationId;
-
-    //@JsonProperty("source_account_balance")
-   // private String destinationBalance;
 }

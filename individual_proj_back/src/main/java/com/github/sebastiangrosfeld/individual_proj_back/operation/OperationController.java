@@ -22,18 +22,22 @@ public class OperationController {
     @PostMapping("/add")
     public ResponseEntity<OperationAddResponse> addOperation(@RequestBody OperationAddRequest addRequest) {
         OperationAddResponse addResponse = operationService.addOperation(addRequest);
+
+        if(addResponse == null)
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(addResponse);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(addResponse);
     }
 
-    @GetMapping("/{id}")
+  /*  @GetMapping("/{id}")
     public ResponseEntity<Operation> getOperation(@PathVariable Long id){
-        Operation operation = operationService.findAccountById(id);
+        Operation operation = operationService.findOperationById(id);
 
         if(operation == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(operation);
 
         return ResponseEntity.ok(operation);
-    }
+    }*/
 
     @GetMapping("for_account_{id}")
     public ResponseEntity<List<Operation>> getOperationsForAccountById(@PathVariable Long id){

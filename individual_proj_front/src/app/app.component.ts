@@ -24,8 +24,8 @@ export class AppComponent implements OnInit{
       const user = this.storageService.getUser();
       this.roles = user.roles;
 
-      this.showAdminBoard = this.roles.includes('ADMIN');
-      this.showManagerBoard = this.roles.includes('MANAGER');
+     // this.showAdminBoard = this.roles.includes('ADMIN');
+      //this.showManagerBoard = this.roles.includes('MANAGER');
 
       this.username = user.username;
     }

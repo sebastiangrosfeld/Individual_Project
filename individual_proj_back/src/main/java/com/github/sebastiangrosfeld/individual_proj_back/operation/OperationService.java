@@ -6,7 +6,6 @@ import com.github.sebastiangrosfeld.individual_proj_back.account.AccountReposito
 import com.github.sebastiangrosfeld.individual_proj_back.account.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,6 +27,9 @@ public class OperationService {
         Account destAccount = accountService.findAccountByCode(operationAddRequest.getDestinationCode());
         System.out.println(srcAccount.getCode());
         System.out.println(destAccount.getCode());
+
+        if(srcAccount.getBalance().doubleValue() < operationAddRequest.getOperationValue().doubleValue())
+            return null;
 
         BigDecimal srcBalance = srcAccount.getBalance().add(operationAddRequest.getOperationValue());
         BigDecimal dstBalance = destAccount.getBalance().subtract(operationAddRequest.getOperationValue());
@@ -69,7 +71,7 @@ public class OperationService {
         return response;
     }
 
-    public Operation findAccountById(Long id){
+    public Operation findOperationById(Long id){
 
         Optional<Operation> operation = operationRepository.findOperationById(id);
 
@@ -83,9 +85,19 @@ public class OperationService {
 
     public List<Operation> getAllOperationsForCurrentUser(){
 
-        List<Account> userAccounts = accountService.getAllForCurrentUserAccounts();
+        List<Account> userAccounts = accountService.getAllAccountsForCurrentUser();
         List<Operation> operations = new ArrayList<>();
         for (Account a : userAccounts){
+            operations.addAll(a.getOperations());
+        }
+        return operations;
+    }
+
+    public List<Operation> getAllOperationsForUserById(Long id){
+
+        List<Account> userAccounts = accountService.getAllAccountsForUserById(id);
+        List<Operation> operations = new ArrayList<>();
+        for (Account a : userAccounts) {
             operations.addAll(a.getOperations());
         }
         return operations;

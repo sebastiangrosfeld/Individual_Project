@@ -11,14 +11,14 @@ const httpOptions = {
 })
 export class AuthService {
 
-  private apiUrl = "environment.apiUrl";
+  private apiUrl = "http://localhost:8080/bankapp/v1/auth/";
 
   constructor(private http: HttpClient) { }
 
-  login(login: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<any> {
     return this.http.post(
       this.apiUrl + 'authenticate', {
-      login,
+      email,
       password,
     }, httpOptions);
   }
@@ -33,6 +33,6 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(this.apiUrl + 'signout',{}, httpOptions)
+    return this.http.post(this.apiUrl + 'logout',{}, httpOptions)
   }
 }

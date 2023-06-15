@@ -2,19 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-board-user',
+  templateUrl: './board-user.component.html',
+  styleUrls: ['./board-user.component.css']
 })
-export class HomeComponent implements OnInit{
-  content?: string;
+export class BoardUserComponent implements OnInit{
+  content?: any;
+  accounts?: any[] = []; 
 
   constructor(private userService: UserService) { }
-
+  
   ngOnInit(): void {
-    /*this.userService.getPublicContent().subscribe({
+    this.userService.getUserBoard().subscribe({
       next: data => {
         this.content = data;
+        console.log(this.content);
       },
       error: err => {console.log(err)
         if (err.error) {
@@ -23,6 +25,8 @@ export class HomeComponent implements OnInit{
           this.content = "Error with status: " + err.status;
         }
       }
-    });*/
+    });
+    
   }
+
 }
