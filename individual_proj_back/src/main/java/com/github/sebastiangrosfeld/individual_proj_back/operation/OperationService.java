@@ -31,8 +31,8 @@ public class OperationService {
         if(srcAccount.getBalance().doubleValue() < operationAddRequest.getOperationValue().doubleValue())
             return null;
 
-        BigDecimal srcBalance = srcAccount.getBalance().add(operationAddRequest.getOperationValue());
-        BigDecimal dstBalance = destAccount.getBalance().subtract(operationAddRequest.getOperationValue());
+        BigDecimal srcBalance = srcAccount.getBalance().subtract(operationAddRequest.getOperationValue());
+        BigDecimal dstBalance = destAccount.getBalance().add(operationAddRequest.getOperationValue());
 
         srcAccount.setBalance(srcBalance);
         destAccount.setBalance(dstBalance);
@@ -66,6 +66,7 @@ public class OperationService {
         OperationAddResponse response = OperationAddResponse.builder()
                 .sourceId(srcAccount.getId())
                 .destinationId(destAccount.getId())
+                .value(operationAddRequest.getOperationValue().doubleValue())
                 .build();
 
         return response;

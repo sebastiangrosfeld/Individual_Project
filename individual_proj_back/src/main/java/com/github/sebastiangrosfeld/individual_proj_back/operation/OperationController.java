@@ -1,6 +1,11 @@
 package com.github.sebastiangrosfeld.individual_proj_back.operation;
 
 
+import com.github.sebastiangrosfeld.individual_proj_back.account.Account;
+import com.github.sebastiangrosfeld.individual_proj_back.account.AccountService;
+import com.github.sebastiangrosfeld.individual_proj_back.auth.AuthenticationService;
+import com.github.sebastiangrosfeld.individual_proj_back.user.User;
+import com.github.sebastiangrosfeld.individual_proj_back.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +24,15 @@ public class OperationController {
 
     private final OperationService operationService;
 
+    private final AccountService accountService;
+
+    private final AuthenticationService authenticationService;
+
     @PostMapping("/add")
     public ResponseEntity<OperationAddResponse> addOperation(@RequestBody OperationAddRequest addRequest) {
+
+        if(!sourceAccountIsForCurrentUser(accountService.findAccountByCode(addRequest.getSourceCode())))
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
         OperationAddResponse addResponse = operationService.addOperation(addRequest);
 
         if(addResponse == null)
@@ -59,5 +71,11 @@ public class OperationController {
         return ResponseEntity.ok(operations);
     }
 
+    private boolean sourceAccountIsForCurrentUser(Account account){
+
+        if(account.getUser().getEmail().equals(authenticationService.getEmailFromCurrentUser()))
+            return true;
+        return false;
+    }
 
 }

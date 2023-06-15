@@ -2,6 +2,7 @@ package com.github.sebastiangrosfeld.individual_proj_back.user;
 
 
 import com.github.sebastiangrosfeld.individual_proj_back.account.Account;
+import com.github.sebastiangrosfeld.individual_proj_back.account.AccountRepository;
 import com.github.sebastiangrosfeld.individual_proj_back.account.AccountService;
 import com.github.sebastiangrosfeld.individual_proj_back.auth.AuthenticationService;
 import com.github.sebastiangrosfeld.individual_proj_back.operation.Operation;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class AdminController {
     private final UserService userService;
 
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
     private final OperationService operationService;
 
@@ -121,6 +124,20 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responses);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+    @PutMapping("set_balance_{balance}_for_account_{id}")
+    public ResponseEntity<?> setBalanceForCount(@PathVariable("balance") BigDecimal balance, @PathVariable("id") Long id){
+        if(!currentUserHasAdminRole())
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(null);
+
+        Account account = accountService.findAccountById(id);
+        account.setBalance(balance);
+
+        accountRepository.save(account);
+
+        return ResponseEntity.ok().body(null);
+
     }
 
     private boolean currentUserHasAdminRole(){

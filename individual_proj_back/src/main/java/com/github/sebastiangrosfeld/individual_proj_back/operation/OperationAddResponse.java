@@ -20,4 +20,7 @@ public class OperationAddResponse {
 
     @JsonProperty("destination_account_id")
     private Long destinationId;
+
+    @JsonProperty("value")
+    private double value;
 }
